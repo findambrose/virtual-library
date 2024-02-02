@@ -2,6 +2,8 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\AuthorController;
 use Inertia\Inertia;
 
 /*
@@ -33,3 +35,7 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 });
+
+Route::get('/authors', [AuthorController::class, 'index'])->name('authors.index');
+
+Route::get('/books', [BookController::class, 'index'])->name('books.index');
