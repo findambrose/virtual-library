@@ -4,6 +4,7 @@
             v-model="modal"
             title="Create Author"
             :ok-text="'Submit'"
+            :cancel-text="'Cancel'"
             :loading="loading"
             @on-ok="submitForm">
             <Form >
@@ -175,9 +176,11 @@ export default {
                     this.loading = false;
                     this.modal = false;
                     this.data = response.data.authors.data;
+                    this.$swal('Success', 'Author created successfully', 'success');
                 })
                 .catch(error => {
                     this.loading = false;
+                    this.$swal('Error', 'An error occurred', 'error');
                     console.log(error);
                 })
         },

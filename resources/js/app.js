@@ -7,7 +7,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import ViewUIPlus from 'view-ui-plus'
 import 'view-ui-plus/dist/styles/viewuiplus.css'
-
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 import axios from 'axios';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -15,10 +16,11 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
-    setup({ el, App, props, plugin, axios }) {
+    setup({ el, App, props, plugin, axios}) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ViewUIPlus)
+            .use(VueSweetalert2)
             .use(axios)
             .use(ZiggyVue)
             .mount(el);

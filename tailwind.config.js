@@ -11,7 +11,9 @@ export default {
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
     ],
-
+    optimizeDeps: {
+        exclude: ['js-big-decimal']
+    },
     theme: {
         extend: {
             fontFamily: {

@@ -9,6 +9,7 @@ import Welcome from '@/Components/Welcome.vue';
             v-model="modal"
             title="Create Book"
             :ok-text="'Submit'"
+            :cancel-text="'Cancel'"
             :loading="loading"
             @on-ok="submitForm">
             <Form>
@@ -127,9 +128,11 @@ export default {
                     this.loading = false;
                     this.modal = false;
                     this.data = response.data.books.data;
+                    this.$swal('Success', 'Book created successfully', 'success');
                 })
                 .catch(error => {
                     this.loading = false;
+                    this.$swal('Error', 'An error occurred', 'error');
                     console.log(error);
                 })
         },
