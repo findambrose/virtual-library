@@ -4,10 +4,10 @@ import Welcome from '@/Components/Welcome.vue';
 </script>
 
 <template>
-    <AppLayout title="Dashboard">
+    <AppLayout title="Books">
         <Modal
             v-model="modal"
-            title="Create Author"
+            title="Create Book"
             :ok-text="'Submit'"
             :loading="loading"
             @on-ok="submitForm">
@@ -83,7 +83,9 @@ export default {
                 },
                 {
                     title: 'Author',
-                    key: 'author'
+                    render: (h, params) => {
+                        return h('span', params.row.author.name)
+                    }
                 },
                 {
                     title: 'Created At',
@@ -97,12 +99,12 @@ export default {
             this.loading = true;
             axios.post('api/books', this.form)
                 .then(response => {
-                    this.loading = false;
+                    // this.loading = false;
                     this.modal = false;
                     this.$emit('authorCreated', response.data);
                 })
                 .catch(error => {
-                    this.loading = false;
+                    // this.loading = false;
                     console.log(error);
                 })
         }

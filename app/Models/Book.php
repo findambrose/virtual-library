@@ -14,4 +14,14 @@ class Book extends Model
         'isbn',
         'author_id'
     ];
+
+    public function getCreatedAtAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->toDateTimeString();
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(Author::class);
+    }
 }

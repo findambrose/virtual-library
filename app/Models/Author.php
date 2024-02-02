@@ -17,7 +17,6 @@ class Author extends Model
         'genre'
     ];
 
-    //format created at usinf attribute
     public function getCreatedAtAttribute($value)
     {
         return \Carbon\Carbon::parse($value)->toDateTimeString();

@@ -13,7 +13,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::paginate(10);
+        $books = Book::with('author')->paginate(10);
         return response()->json($books, 200);
     }
 
@@ -22,6 +22,13 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+
+        $request->validate([
+            'name' => 'required|string',
+            'isbn' => 'required|unique:books,isbn',
+            'author_id' => 'required'
+        ]);
+
         try {
             Book::create($request->all());
             return response()->json(['message' => "Book Created"], 201);
