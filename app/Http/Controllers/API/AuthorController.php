@@ -32,7 +32,9 @@ class AuthorController extends Controller
 
         try {
             Author::create($request->all());
-            return response()->json(['message' => "Author Created"], 201);
+            $authors = Author::orderBy('id', 'desc')->paginate(10);
+            return response()->json(['message' => "Author Created",
+                'authors' => $authors], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Author creation failed!'], 409);
         }

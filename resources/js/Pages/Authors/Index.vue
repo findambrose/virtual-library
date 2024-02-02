@@ -17,12 +17,12 @@
                 </FormItem>
                 <div class="grid grid-cols-2 gap-2">
                     <FormItem label="Gender">
-                        <Select v-model="form.gender">
+                        <Select placeholder="Choose Gender" v-model="form.gender">
                             <Option v-for="item in genders" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </FormItem>
                     <FormItem label="Country">
-                        <Select v-model="form.country">
+                        <Select placeholder="Choose Country" v-model="form.country">
                             <Option v-for="item in countries" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </FormItem>
@@ -33,6 +33,19 @@
                 </FormItem>
 
             </Form>
+        </Modal>
+        <Modal
+            v-model="viewModal"
+            title="Author Details"
+            :ok-text="'Okay'"
+            @on-ok="">
+            <div>
+                <p>Author Name: {{ author.name }}</p>
+                <p>Age: {{ author.age }}</p>
+                <p>Country: {{ author.country }}</p>
+                <p>Gender: {{ author.gender }}</p>
+                <p>Genre: {{ author.genre }}</p>
+            </div>
         </Modal>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -46,7 +59,11 @@
                     <div class="flex justify-end mt-4 px-4 pb-4">
                         <Button @click="modal=true" type="primary">Create Author</Button>
                     </div>
-                    <Table :columns="columns" :data="authors.data"></Table>
+                    <Table :no-data-text="'No data'" :columns="columns" :data="data">
+                        <template #action="{ row, index }">
+                            <Button type="primary" size="small" style="margin-right: 5px" @click="getDetails(row)">View Details</Button>
+                        </template>
+                    </Table>
                 </div>
             </div>
         </div>
@@ -71,6 +88,9 @@ export default {
             required: true
         }
     },
+    created: function () {
+        this.data = this.authors.data;
+    },
     data() {
         return {
             form: {
@@ -80,6 +100,7 @@ export default {
                 country: '',
                 genre: '',
             },
+            author: {},
             countries: [
                 {
                     value: 'Kenya',
@@ -109,6 +130,7 @@ export default {
                 }
             ],
             modal: false,
+            viewModal: false,
             loading: false,
             columns: [
                 {
@@ -135,7 +157,10 @@ export default {
                     title: 'Created At',
                     key: 'created_at'
                 },
-
+                {
+                    title: 'Actions',
+                    slot: 'action'
+                }
             ],
             data: [
 
@@ -149,10 +174,20 @@ export default {
                 .then(response => {
                     this.loading = false;
                     this.modal = false;
-                    this.$emit('authorCreated', response.data);
+                    this.data = response.data.authors.data;
                 })
                 .catch(error => {
                     this.loading = false;
+                    console.log(error);
+                })
+        },
+        getDetails(row) {
+            axios.get('api/authors/'+row.id)
+                .then(response => {
+                    this.author = response.data;
+                    this.viewModal = true;
+                })
+                .catch(error => {
                     console.log(error);
                 })
         }

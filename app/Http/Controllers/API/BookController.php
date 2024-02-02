@@ -31,7 +31,12 @@ class BookController extends Controller
 
         try {
             Book::create($request->all());
-            return response()->json(['message' => "Book Created"], 201);
+            //order in reverse order
+            $books = Book::with('author')->
+            orderBy('id', 'desc')->
+            paginate(10);
+            return response()->json(['message' => "Book Created",
+                'books' => $books], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Book creation failed!'], 409);
         }
